@@ -12,9 +12,20 @@ use hyper::service::{make_service_fn, service_fn};
 use serde_json::json;
 use dns_lookup::lookup_addr;
 
-async fn getip(_req: Request<Body>, addr: SocketAddr) -> Result<Response<Body>, Infallible> {
-    let remote_addr = addr.ip().to_string();
-    let port = addr.port().to_string();
+async fn getip(req: Request<Body>, addr: SocketAddr) -> Result<Response<Body>, Infallible> {
+    let empty_header = "".parse().unwrap();
+    let real_ip = req.headers().get("X-Real-IP").unwrap_or(&empty_header).to_str().unwrap_or("");
+    let real_port = req.headers().get("X-Real-Port").unwrap_or(&empty_header).to_str().unwrap_or("");
+    let remote_addr = if real_ip != "" {
+        real_ip.to_owned()
+    } else {
+        addr.ip().to_string()
+    };
+    let port = if real_port != "" {
+        real_port.to_owned()
+    } else {
+        addr.port().to_string()
+    };
     let hostname = lookup_addr(&addr.ip()).unwrap_or("".to_string());
     let result = json!({
         "ip": remote_addr,

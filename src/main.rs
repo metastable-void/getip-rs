@@ -4,7 +4,7 @@
 
 use std::env;
 use std::convert::Infallible;
-use std::net::SocketAddr;
+use std::net::{SocketAddr, IpAddr};
 use std::str::FromStr;
 use hyper::server::conn::AddrStream;
 use hyper::{Body, Request, Response, Server};
@@ -26,7 +26,8 @@ async fn getip(req: Request<Body>, addr: SocketAddr) -> Result<Response<Body>, I
     } else {
         addr.port().to_string()
     };
-    let hostname = lookup_addr(&addr.ip()).unwrap_or("".to_string());
+    let ip: IpAddr = remote_addr.parse().unwrap_or([0, 0, 0, 0].into());
+    let hostname = lookup_addr(&ip).unwrap_or("".to_string());
     let result = json!({
         "ip": remote_addr,
         "port": port,

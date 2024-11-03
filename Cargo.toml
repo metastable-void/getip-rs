@@ -1,6 +1,6 @@
 [package]
 name = "getip-rs"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -9,5 +9,10 @@ edition = "2021"
 hyper = { version = "0.14", features = ["full"] }
 tokio = { version = "1", features = ["full"] }
 serde_json = "1.0"
-dns-lookup = "1.0"
+dns-lookup = "2.0"
 trust-dns-client = { version = "0.22", default-features = false }
+dns-server = "0.2.3"
+permit = "0.1.5"
+signal-hook = "0.3.17"
+unbounded-udp = "1.0.1"
+libc = "0.2.155"

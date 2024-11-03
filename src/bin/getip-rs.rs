@@ -17,12 +17,12 @@ async fn getip(req: Request<Body>, addr: SocketAddr) -> Result<Response<Body>, I
     let real_ip = req.headers().get("X-Real-IP").unwrap_or(&empty_header).to_str().unwrap_or("");
     let real_port = req.headers().get("X-Real-Port").unwrap_or(&empty_header).to_str().unwrap_or("");
     let remote_addr = if real_ip != "" {
-        real_ip.to_owned()
+        real_ip.trim().to_owned()
     } else {
         addr.ip().to_string()
     };
     let port = if real_port != "" {
-        real_port.to_owned()
+        real_port.trim().to_owned()
     } else {
         addr.port().to_string()
     };
